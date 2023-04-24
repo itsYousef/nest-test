@@ -29,3 +29,26 @@ export class CreateProfileDto {
     @ApiProperty({ enum: ['Admin', 'Moderator', 'User'] })
     role: UserRole;
 }
+
+export class Profile {
+    @ApiProperty()
+    id: number;
+
+    @ApiProperty()
+    name: string;
+
+    @ApiProperty()
+    age: number;
+
+    @ApiProperty()
+    email: string;
+
+    @ApiProperty()
+    phone: string;
+
+    @ApiProperty({ type: [String] })
+    books: string[];
+
+    @ApiProperty({ enum: ['Admin', 'Moderator', 'User'] })
+    role: UserRole;
+}

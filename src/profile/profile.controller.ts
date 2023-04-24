@@ -1,16 +1,21 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { ProfileService } from './profile.service';
-import { CreateProfileDto } from './dto/create-profile.dto';
+import { CreateProfileDto, Profile } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
-import { ApiBody } from '@nestjs/swagger';
+import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('profile')
 @Controller('profile')
 export class ProfileController {
   constructor(private readonly profileService: ProfileService) {}
 
+  // @ApiCreatedResponse() //shorthand for next decorator
+  @ApiResponse({ status: 201, description: 'The record has been successfully created.' })
+  // @ApiForbiddenResponse() //shorthand for next decorator
+  @ApiResponse({ status: 403, description: 'Forbidden.' })
   @Post()
   @ApiBody({ type: [CreateProfileDto] })
-  create(@Body() createProfileDto: CreateProfileDto) {
+  create(@Body() createProfileDto: CreateProfileDto): Promise<Profile> {
     return this.profileService.create(createProfileDto);
   }
 

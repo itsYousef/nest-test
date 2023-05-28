@@ -6,4 +6,8 @@ import { ProfileController } from './profile.controller';
   controllers: [ProfileController],
   providers: [ProfileService]
 })
-export class ProfileModule {}
+export class ProfileModule {
+  constructor(){
+    console.log("here:",process.env.URL);
+  }
+}

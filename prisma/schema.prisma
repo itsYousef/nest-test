@@ -19,19 +19,17 @@ model Post {
 }
 
 model Profile {
-  id     Int     @id @default(autoincrement())
-  name   String?
-  email  String? @unique
-  phone  String?
-  age    Int
-  user   User    @relation(fields: [userId], references: [id])
-  userId Int     @unique
+  id    Int     @id @default(autoincrement())
+  name  String?
+  email String? @unique
+  phone String?
+  age   Int
+  user  User?
 }
 
 model User {
-  id      Int      @id @default(autoincrement())
-  email   String   @unique
-  name    String?
-  posts   Post[]
-  profile Profile?
+  id        Int     @id @default(autoincrement())
+  posts     Post[]
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId Int     @unique
 }

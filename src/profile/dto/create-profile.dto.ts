@@ -23,11 +23,8 @@ export class CreateProfileDto {
   @ApiProperty()
   age: number;
 
-  @ApiProperty({ type: [String] })
-  books: string[];
-
-  @ApiProperty({ enum: ["Admin", "Moderator", "User"] })
-  role: UserRole;
+  // @ApiProperty({ enum: ["Admin", "Moderator", "User"] })
+  // role: UserRole;
 }
 
 export class Profile {
@@ -46,9 +43,6 @@ export class Profile {
   @ApiProperty()
   phone: string;
 
-  @ApiProperty({ type: [String] })
-  books: string[];
-
-  @ApiProperty({ enum: ["Admin", "Moderator", "User"] })
-  role: UserRole;
+  // @ApiProperty({ enum: ["Admin", "Moderator", "User"] })
+  // role: UserRole;
 }

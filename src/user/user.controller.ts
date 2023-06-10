@@ -9,8 +9,9 @@ import {
     Param,
     Delete,
 } from "@nestjs/common";
-import { ApiBody, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { ApiBody, ApiResponse } from "@nestjs/swagger";
 import { UpdateUserDto } from './dto/update-user.dto';
+import { UserEntity } from './entity/user.entity';
 
 @Controller('user')
 export class UserController {
@@ -30,11 +31,13 @@ export class UserController {
     }
 
     @Get()
+    @ApiResponse({ type: [UserEntity] })
     findAll() {
         return this.userService.findAll();
     }
 
     @Get(":id")
+    @ApiResponse({ type: UserEntity })
     findOne(@Param("id") id: string) {
         return this.userService.findOne(+id);
     }

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -8,9 +8,10 @@ export class UserService {
     constructor(
         private prisma: PrismaService
     ) { }
+    private readonly logger = new Logger(UserService.name);
 
     async create(input: CreateUserDto) {
-        const { age, email, name, phone } = input;
+        const { age, email, name, phone, password } = input;
 
         const user = await this.prisma.user.create({
             data: {
@@ -21,7 +22,8 @@ export class UserService {
                         name,
                         phone
                     }
-                }
+                },
+                password
             }
         })
 
@@ -29,10 +31,12 @@ export class UserService {
     }
 
     findAll() {
+        // this.logger.log("TEST logger")
         return this.prisma.user.findMany({
-            include: {
+            select: {
+                profile: true,
                 posts: true,
-                profile: true
+                id: true
             }
         })
     }
@@ -42,9 +46,10 @@ export class UserService {
             where: {
                 id
             },
-            include: {
+            select: {
+                profile: true,
                 posts: true,
-                profile: true
+                id: true
             }
         })
     }

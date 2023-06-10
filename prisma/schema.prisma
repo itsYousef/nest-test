@@ -29,6 +29,7 @@ model Profile {
 
 model User {
   id        Int     @id @default(autoincrement())
+  password  String
   posts     Post[]
   profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
   profileId Int     @unique

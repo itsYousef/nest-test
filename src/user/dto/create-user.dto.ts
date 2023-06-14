@@ -16,15 +16,21 @@ export class CreateUserDto {
   @IsString()
   name: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    default: "test"
+  })
   @IsString()
   username: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    default: "test@gmail.com"
+  })
   @IsEmail()
   email: string;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    default: "+989379451234"
+  })
   @IsPhoneNumber()
   phone?: string;
 

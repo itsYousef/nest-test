@@ -24,7 +24,8 @@ model Profile {
   email String? @unique
   phone String?
   age   Int
-  user  User?
+  user  User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int @unique
 }
 
 model User {
@@ -32,6 +33,5 @@ model User {
   password  String
   username  String @unique
   posts     Post[]
-  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
-  profileId Int     @unique
+  profile   Profile?
 }

@@ -11,7 +11,7 @@ export class UserService {
 	private readonly logger = new Logger(UserService.name);
 
 	async create(input: CreateUserDto) {
-		const { age, email, name, phone, password, username } = input;
+		const { age, email, name, phone, password, username, role } = input;
 
 		const user = await this.prisma.user.create({
 			data: {
@@ -24,7 +24,8 @@ export class UserService {
 					}
 				},
 				password,
-				username
+				username,
+				role
 			}
 		})
 
@@ -64,7 +65,7 @@ export class UserService {
 	}
 
 	update(id: number, updateUserDto: UpdateUserDto) {
-		const { age, email, name, phone } = updateUserDto;
+		const { age, email, name, phone, role } = updateUserDto;
 
 		return this.prisma.user.update({
 			data: {
@@ -75,7 +76,8 @@ export class UserService {
 						name,
 						phone
 					}
-				}
+				},
+				role
 			},
 			where: {
 				id

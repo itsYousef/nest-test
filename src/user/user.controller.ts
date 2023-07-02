@@ -18,6 +18,8 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { UserEntity } from './entity/user.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
+import { Roles } from 'src/auth/roles.decorator';
+import { Role } from 'src/auth/role.enum';
 
 @Controller('user')
 export class UserController {
@@ -33,6 +35,7 @@ export class UserController {
     @Post()
     @ApiBody({ type: CreateUserDto })
     @ApiTags("user")
+    @Roles(Role.Admin)
     create(@Body() createUserDto: CreateUserDto) {
         return this.userService.create(createUserDto);
     }

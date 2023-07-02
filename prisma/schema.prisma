@@ -19,19 +19,25 @@ model Post {
 }
 
 model Profile {
-  id    Int     @id @default(autoincrement())
-  name  String?
-  email String? @unique
-  phone String?
-  age   Int
-  user  User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId Int @unique
+  id     Int     @id @default(autoincrement())
+  name   String?
+  email  String? @unique
+  phone  String?
+  age    Int
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int     @unique
 }
 
 model User {
-  id        Int     @id @default(autoincrement())
-  password  String
-  username  String @unique
-  posts     Post[]
-  profile   Profile?
+  id       Int      @id @default(autoincrement())
+  password String
+  username String   @unique
+  role     Role     @default(User)
+  posts    Post[]
+  profile  Profile?
+}
+
+enum Role {
+  User
+  Admin
 }

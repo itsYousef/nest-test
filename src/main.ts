@@ -3,9 +3,14 @@ import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { AppModule } from "./app.module";
 import { ValidationPipe } from "@nestjs/common";
 import { PrismaService } from "./prisma/prisma.service";
+import helmet from 'helmet';
+import * as csurf from 'csurf';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.use(helmet());
+  app.enableCors();
+  app.use(csurf());
   app.useGlobalPipes(new ValidationPipe({
     forbidNonWhitelisted: true
   }));

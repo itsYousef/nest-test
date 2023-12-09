@@ -1,17 +1,11 @@
-FROM node:20.10-alpine As development
+FROM node:20.10-bookworm-slim
 WORKDIR /usr/src/app
+RUN apt update -y && apt install -y openssl
 COPY package*.json ./
-RUN npm install --only=development
+RUN npm install
 COPY . .
 RUN npm run build
 
-FROM node:20.10-alpine as production
-ARG NODE_ENV=production
-ENV NODE_ENV=${NODE_ENV}
-WORKDIR /usr/src/app
-COPY package*.json ./
-RUN npm install --only=production
-COPY . .
-COPY --from=development /usr/src/app/dist ./dist
-
-CMD ["node", "dist/main"]
+EXPOSE 4000
+ENTRYPOINT ["node"]
+CMD ["dist/main"]

@@ -35,6 +35,7 @@ export class UserController {
     @Post()
     @ApiBody({ type: CreateUserDto })
     @ApiTags("user")
+    // @UseGuards(AuthGuard, RolesGuard)
     @Roles(Role.Admin)
     create(@Body() createUserDto: CreateUserDto) {
         return this.userService.create(createUserDto);

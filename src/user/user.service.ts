@@ -13,6 +13,7 @@ export class UserService {
 	async create(input: CreateUserDto) {
 		const { age, email, name, phone, password, username, role } = input;
 
+		// todo: use try catch for database errors
 		const user = await this.prisma.user.create({
 			data: {
 				profile: {

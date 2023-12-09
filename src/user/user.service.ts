@@ -33,9 +33,9 @@ export class UserService {
 		return user;
 	}
 
-	findAll() {
+	async findAll() {
 		// this.logger.log("TEST logger")
-		return this.prisma.user.findMany({
+		return await this.prisma.user.findMany({
 			select: {
 				profile: true,
 				posts: true,

@@ -17,7 +17,7 @@ run_test:
         - node_modules/
     rules:
     - if: $IS_MANUAL == "true"
-      when: never
+      when: manual
     before_script:
         - apt update -y && apt install -y openssl
     script:
@@ -34,7 +34,7 @@ build_image:
         - docker:24.0.7-dind
     rules:
     - if: $IS_MANUAL == "true"
-      when: never
+      when: manual
     before_script:
         - docker login -u $REGISTRY_USER -p $REGISTRY_PASS
     script:

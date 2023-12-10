@@ -3,6 +3,8 @@ version: '3.7'
 services:
   main:
     container_name: main
+    # put image name instead of "build" for deployment on remote server
+    # image: itsyousef7677/nest-test
     build:
       context: .
     ports:

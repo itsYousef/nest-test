@@ -1,0 +1,28 @@
+version: '3.7'
+
+services:
+  main:
+    container_name: main
+    build:
+      context: .
+    ports:
+      - 4000:4000
+    environment:
+      DATABASE_URL: postgresql://postgres:123456@postgres:5432/test?schema=public
+      JWT_SECRET: caskl52@seca%
+    depends_on:
+      - postgres
+  postgres:
+    container_name: postgres
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_USER: postgres
+      POSTGRES_DB: test
+      PG_DATA: /var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+volumes:
+  pgdata:

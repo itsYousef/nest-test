@@ -7,5 +7,4 @@ COPY . .
 RUN npm run build
 
 EXPOSE 4000
-ENTRYPOINT ["node"]
-CMD ["dist/main"]
+CMD npx prisma db push && node dist/main

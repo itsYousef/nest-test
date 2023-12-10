@@ -1,14 +1,14 @@
-# stages:
-#   - "test"
-#   - "build"
-#   - "deploy"
+stages:
+  - test
+  - build
+#   - deploy
 
 variables:
     IS_MANUAL: "true"
 
 run_test:
     image: node:20.10-bookworm-slim
-    # stage: test
+    stage: test
     cache:  # Cache modules using lock file
         key:
             files:
@@ -25,6 +25,7 @@ run_test:
         - npm run test
 
 build_image:
+    stage: build
     variables:
         IMAGE_NAME: itsyousef7677/nest-test
         IMAGE_TAG: "1.0"

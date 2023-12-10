@@ -1,14 +1,44 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from '../prisma/prisma.service';
+import { Role } from 'src/auth/role.enum';
 
 @Injectable()
-export class UserService {
+export class UserService implements OnModuleInit {
 	constructor(
 		private prisma: PrismaService
 	) { }
 	private readonly logger = new Logger(UserService.name);
+
+	async onModuleInit() {
+		await this.createDefaultAdmin();
+	}
+
+	private async createDefaultAdmin() {
+		const admin = await this.prisma.user.findUnique({
+			where: {
+				username: process.env.ADMIN_USERNAME
+			}
+		});
+
+		if (!admin) {
+			try {
+				await this.create({
+					age: 20,
+					username: process.env.ADMIN_USERNAME,
+					email: "admin@gmail.com",
+					name: "admin",
+					password: process.env.ADMIN_PASSWORD,
+					role: Role.Admin,
+					phone: "+989999999999",
+				});
+				console.log(`Default admin user created: ${process.env.ADMIN_USERNAME}`);
+			} catch (error) {
+				console.log("Failed to create default user. Probably its existed.");
+			}
+		}
+	}
 
 	async create(input: CreateUserDto) {
 		const { age, email, name, phone, password, username, role } = input;

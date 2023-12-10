@@ -7,4 +7,4 @@ COPY . .
 RUN npm run build
 
 EXPOSE 4000
-CMD npx prisma db push && node dist/main
+CMD sleep 5 && npx prisma db push && node dist/main

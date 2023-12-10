@@ -13,7 +13,8 @@ services:
       ADMIN_USERNAME: admin
       ADMIN_PASSWORD: 123456789
     depends_on:
-      - postgres
+      postgres:
+        condition: service_started
   postgres:
     container_name: postgres
     image: postgres:16-alpine

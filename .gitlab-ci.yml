@@ -18,6 +18,8 @@ run_test:
     rules:
     - if: $IS_MANUAL == "true"
       when: manual
+    - if: $IS_MANUAL == "false"
+      when: always
     before_script:
         - apt update -y && apt install -y openssl
     script:

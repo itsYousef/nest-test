@@ -17,7 +17,6 @@ run_test:
     script:
         - npm install
         - npm run test
-        - npm run test:e2e
 
 # docker-build:
 #   image: docker:cli

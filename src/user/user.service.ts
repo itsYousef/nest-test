@@ -2,7 +2,7 @@ import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from '../prisma/prisma.service';
-import { Role } from 'src/auth/role.enum';
+import { Role } from '../auth/role.enum';
 
 @Injectable()
 export class UserService implements OnModuleInit {

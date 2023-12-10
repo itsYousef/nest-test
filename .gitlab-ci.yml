@@ -4,7 +4,7 @@ stages:
 #   - deploy
 
 variables:
-    IS_MANUAL: "true"
+    IS_MANUAL: "false"
 
 run_test:
     image: node:20.10-bookworm-slim
@@ -25,14 +25,14 @@ run_test:
         - npm run test
 
 build_image:
+    image: docker:24.0.7
+    services:
+        - docker:24.0.7-dind
     stage: build
     variables:
         IMAGE_NAME: itsyousef7677/nest-test
         IMAGE_TAG: "1.0"
         DOCKER_TLS_CERTDIR: "/certs"
-    image: docker:24.0.7
-    services:
-        - docker:24.0.7-dind
     rules:
     - if: $IS_MANUAL == "true"
       when: manual

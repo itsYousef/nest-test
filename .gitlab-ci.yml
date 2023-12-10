@@ -6,6 +6,14 @@
 run_test:
     image: node:20.10-bookworm-slim
     # stage: test
+    cache:  # Cache modules using lock file
+        key:
+            files:
+                - package-lock.json
+        paths:
+        - node_modules/
+    before_script:
+        - apt update -y && apt install -y openssl
     script:
         - npm install
         - npm run test

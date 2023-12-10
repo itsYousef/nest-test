@@ -4,47 +4,47 @@ stages:
 #   - deploy
 
 variables:
-    IS_MANUAL: "false"
+  IS_MANUAL: "false"
 
 run_test:
-    image: node:20.10-bookworm-slim
-    stage: test
-    cache:  # Cache modules using lock file
-        key:
-            files:
-                - package-lock.json
-        paths:
-        - node_modules/
-    rules:
-    - if: $IS_MANUAL == "true"
-      when: manual
-    - if: $IS_MANUAL == "false"
-      when: always
-    before_script:
-        - apt update -y && apt install -y openssl
-    script:
-        - npm install
-        - npm run test
+  image: node:20.10-bookworm-slim
+  stage: test
+  cache: # Cache modules using lock file
+    key:
+      files:
+        - package-lock.json
+    paths:
+      - node_modules/
+  rules:
+  - if: $IS_MANUAL == "true"
+    when: manual
+  - if: $IS_MANUAL == "false"
+    when: always
+  before_script:
+    - apt update -y && apt install -y openssl
+  script:
+    - npm install
+    - npm run test
 
 build_image:
-    image: docker:24.0.7
-    services:
-        - docker:24.0.7-dind
-    stage: build
-    variables:
-        IMAGE_NAME: itsyousef7677/nest-test
-        IMAGE_TAG: "1.0"
-        DOCKER_TLS_CERTDIR: "/certs"
-    rules:
-    - if: $IS_MANUAL == "true"
-      when: manual
-    before_script:
-        - docker login -u $REGISTRY_USER -p $REGISTRY_PASS
-    script:
-        - docker build -t $IMAGE_NAME:$IMAGE_TAG .  
-        - docker push $IMAGE_NAME:$IMAGE_TAG
-
-
+  image: docker:24.0.7
+  services:
+    - docker:24.0.7-dind
+  stage: build
+  variables:
+    IMAGE_NAME: itsyousef7677/nest-test
+    IMAGE_TAG: "1.0"
+    DOCKER_TLS_CERTDIR: "/certs"
+  rules:
+  - if: $IS_MANUAL == "true"
+    when: manual
+  - if: $IS_MANUAL == "false"
+    when: always
+  before_script:
+    - docker login -u $REGISTRY_USER -p $REGISTRY_PASS
+  script:
+    - docker build -t $IMAGE_NAME:$IMAGE_TAG .
+    - docker push $IMAGE_NAME:$IMAGE_TAG
 # docker-build:
 #   image: docker:cli
 #   stage: build

@@ -1,61 +1,46 @@
 stages:
-  - test
-  - build
-  - deploy
+    - test
+    - build
+    - deploy
 
-variables:
-  IS_MANUAL: "true"
+run test:
+    stage: test
+    image: node:20.10-bookworm-slim
+    cache: # Cache modules using lock file
+        key:
+            files:
+                - package-lock.json
+        paths:
+            - node_modules/
+    before_script:
+        - apt update -y && apt install -y openssl
+    script:
+        - npm install
+        - npm run test
 
-run_test:
-  image: node:20.10-bookworm-slim
-  stage: test
-  cache: # Cache modules using lock file
-    key:
-      files:
-        - package-lock.json
-    paths:
-      - node_modules/
-  rules:
-  - if: $IS_MANUAL == "true"
+build image:
+    stage: build
+    image: docker:24.0.7
+    services:
+        - docker:24.0.7-dind
+    variables:
+        IMAGE_NAME: itsyousef7677/nest-test
+        IMAGE_TAG: "1.0"
+        DOCKER_TLS_CERTDIR: "/certs"
+    before_script:
+        - docker login -u $REGISTRY_USER -p $REGISTRY_PASS
+    script:
+        - docker build -t $IMAGE_NAME:$IMAGE_TAG .
+        - docker push $IMAGE_NAME:$IMAGE_TAG
+
+.deploy:
+    stage: deploy
+    rules:
+        - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
     when: manual
-  - if: $IS_MANUAL == "false"
-    when: always
-  before_script:
-    - apt update -y && apt install -y openssl
-  script:
-    - npm install
-    - npm run test
-
-build_image:
-  image: docker:24.0.7
-  services:
-    - docker:24.0.7-dind
-  stage: build
-  variables:
-    IMAGE_NAME: itsyousef7677/nest-test
-    IMAGE_TAG: "1.0"
-    DOCKER_TLS_CERTDIR: "/certs"
-  rules:
-  - if: $IS_MANUAL == "true"
-    when: manual
-  - if: $IS_MANUAL == "false"
-    when: always
-  before_script:
-    - docker login -u $REGISTRY_USER -p $REGISTRY_PASS
-  script:
-    - docker build -t $IMAGE_NAME:$IMAGE_TAG .
-    - docker push $IMAGE_NAME:$IMAGE_TAG
-
-# deploy:
-#   stage: deploy
-#   rules:
-#   - if: $IS_MANUAL == "true"
-#     when: manual
-#   - if: $IS_MANUAL == "false"
-#     when: always
-#   before_script:
-#     - chmod 400 $SSH_KEY
-#   script:
-#     - ssh -o StrictHostKeyChecking=no -i $SSH_KEY root@111.111.111.111 "
-#       docker login -u $REGISTRY_USER -p $REGISTRY_PASS &&
-#       docker-compose -f .\docker-compose-prod.yml up -d"
+    before_script:
+        - chmod 400 $SSH_KEY
+    script:
+        - ssh -o StrictHostKeyChecking=no -i $SSH_KEY root@111.111.111.111 "
+          docker login -u $REGISTRY_USER -p $REGISTRY_PASS &&
+          docker-compose -f .\docker-compose-prod.yml up -d"

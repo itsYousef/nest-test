@@ -1,8 +1,8 @@
 import * as request from 'supertest';
 import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import { UserModule } from './user.module';
-import { UserService } from './user.service';
+import { UserModule } from '../src/user/user.module';
+import { UserService } from '../src/user/user.service';
 
 describe('Users', () => {
     let app: INestApplication;

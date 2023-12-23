@@ -4,9 +4,9 @@ services:
   main:
     container_name: main
     # put image name instead of "build" for deployment on remote server
-    # image: itsyousef7677/nest-test
-    build:
-      context: .
+    image: itsyousef7677/nest-test
+    # build:
+    #   context: .
     ports:
       - 4000:4000
     environment:

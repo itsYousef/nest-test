@@ -6,7 +6,7 @@ stages:
 run test:
     stage: test
     image: node:20.10-bookworm-slim
-    cache: # Cache modules using lock file
+    cache: # Cache modules using lock file. you can define it in root level for all jobs
         key:
             files:
                 - package-lock.json

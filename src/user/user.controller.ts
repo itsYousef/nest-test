@@ -13,7 +13,7 @@ import {
     ParseFilePipe,
     MaxFileSizeValidator
 } from "@nestjs/common";
-import { ApiBody, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserEntity } from './entity/user.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -21,6 +21,7 @@ import { diskStorage } from 'multer';
 import { Roles } from '../auth/roles.decorator';
 import { Role } from '../auth/role.enum';
 
+@ApiBearerAuth()
 @Controller('user')
 export class UserController {
     constructor(private readonly userService: UserService) { }
@@ -28,7 +29,7 @@ export class UserController {
     // @ApiCreatedResponse() //shorthand for next decorator
     @ApiResponse({
         status: 201,
-        description: "The record has been successfully created.",
+        description: "The record has been successfully created."
     })
     // @ApiForbiddenResponse() //shorthand for next decorator
     @ApiResponse({ status: 403, description: "Forbidden." })

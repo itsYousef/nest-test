@@ -3,6 +3,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { Role } from '../auth/role.enum';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService implements OnModuleInit {
@@ -43,6 +44,9 @@ export class UserService implements OnModuleInit {
 	async create(input: CreateUserDto) {
 		const { age, email, name, phone, password, username, role } = input;
 
+		const salt = bcrypt.genSaltSync();
+		const hashedPassword = bcrypt.hashSync(password, salt);
+
 		// todo: use try catch for database errors
 		const user = await this.prisma.user.create({
 			data: {
@@ -54,13 +58,13 @@ export class UserService implements OnModuleInit {
 						phone
 					}
 				},
-				password,
+				password: hashedPassword,
 				username,
 				role
 			}
 		})
 
-		return user;
+		return this.findOne(user.id);
 	}
 
 	async findAll() {

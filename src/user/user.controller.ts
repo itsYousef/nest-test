@@ -11,7 +11,8 @@ import {
     UseInterceptors,
     UploadedFile,
     ParseFilePipe,
-    MaxFileSizeValidator
+    MaxFileSizeValidator,
+    UseGuards
 } from "@nestjs/common";
 import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -20,6 +21,8 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { Roles } from '../auth/roles.decorator';
 import { Role } from '../auth/role.enum';
+import { RolesGuard } from 'src/auth/guard/roles.guard';
+import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
 
 @ApiBearerAuth()
 @Controller('user')
@@ -36,8 +39,8 @@ export class UserController {
     @Post()
     @ApiBody({ type: CreateUserDto })
     @ApiTags("user")
-    // @UseGuards(AuthGuard, RolesGuard)
     @Roles(Role.Admin)
+    @UseGuards(JwtAuthGuard, RolesGuard)
     create(@Body() createUserDto: CreateUserDto) {
         return this.userService.create(createUserDto);
     }
@@ -45,6 +48,7 @@ export class UserController {
     @Get()
     @ApiResponse({ type: [UserEntity] })
     @ApiTags("user")
+    @UseGuards(JwtAuthGuard)
     findAll() {
         return this.userService.findAll();
     }
@@ -52,18 +56,21 @@ export class UserController {
     @Get(":id")
     @ApiResponse({ type: UserEntity })
     @ApiTags("user")
+    @UseGuards(JwtAuthGuard)
     findOne(@Param("id") id: string) {
         return this.userService.findOne(+id);
     }
 
     @Patch(":id")
     @ApiTags("user")
+    @UseGuards(JwtAuthGuard)
     update(@Param("id") id: string, @Body() updateUserDto: UpdateUserDto) {
         return this.userService.update(+id, updateUserDto);
     }
 
     @Delete(":id")
     @ApiTags("user")
+    @UseGuards(JwtAuthGuard)
     remove(@Param("id") id: string) {
         return this.userService.remove(+id);
     }
@@ -78,6 +85,7 @@ export class UserController {
             }
         })
     }))
+    @UseGuards(JwtAuthGuard)
     uploadFile(@UploadedFile(new ParseFilePipe({
         validators: [
             new MaxFileSizeValidator({ maxSize: 1000000 }),

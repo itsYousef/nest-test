@@ -10,10 +10,10 @@ import { RolesGuard } from '../auth/guard/roles.guard';
   providers: [
     UserService,
     PrismaService,
-    {
-      provide: APP_GUARD,
-      useClass: RolesGuard,
-    },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: RolesGuard,
+    // },
   ],
   exports: [UserService]
 })
